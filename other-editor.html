@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&display=swap');
+      ::selection {
+        background-color: white;
+        color: black;
+      }
+      body {
+        width: 100vw;
+        height: 100vh;
+        margin: 0;
+        background-color: black;
+      }
+      .text_area {
+        font-family: 'Fira Code';
+        position: absolute;
+        bottom: 0px;
+        width: 100vw;
+        height: 85vh;
+        padding: 10px;
+        margin: 0px;
+        border: none;
+        color: white;
+        background-color: black;
+        font-size: 1rem;
+      }
+      h1 {
+        color: white;
+        font-size: 1.25rem;
+        font-family: Arial;
+        padding: 20px;
+      }
+      h1 > span {
+        text-decoration: underline;
+        color: #fff;
+      }
+    </style>
+    <title>Notes</title>
+  </head>
+  <body onload="load_data()">
+    <h1 class="title">Data saves locally (<span>no internet is required</span>). </h1>
+    <div class="text_container">
+      <textarea spellcheck="false" class="text_area" onkeyup="save_data()" placeholder="Go ahead, TYPE, I dare you."></textarea>
+    </div>
+    <script src="script.js">
+      document.getElementsByClassName('text_area')[0].addEventListener('keydown', function(e) {
+  if(e.key == 'Tab') {
+    e.preventDefault();
+    var start = this.selectionStart;
+    var end = this.selectionEnd;
+    this.value = this.value.substring(0, start) +
+      "\t" + this.value.substring(end);
+    this.selectionStart =
+      this.selectionEnd = start + 1;
+  }
+})
+function save_data() {
+  const header = document.getElementsByClassName('title')[0];
+  header.innerHTML = "saving..."
+  const text = document.getElementsByClassName('text_area')[0].value;
+  localStorage.setItem('text', text);
+  setInterval(() => {
+    header.innerHTML = "saved.";
+  }, 500);
+  
+}
+function load_data() {
+  document.getElementsByClassName('text_area')[0].value = localStorage.getItem('text')
+}
+    </script>
+  </body>
+</html>
